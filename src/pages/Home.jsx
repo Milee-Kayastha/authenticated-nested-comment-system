@@ -1,5 +1,5 @@
 import React from "react";
-import Comment from "../components/Comment";
+import Comments from "../components/Comments";
 
 const Home = () => {
   return (
@@ -18,12 +18,12 @@ const Home = () => {
             One more year loaded with sweet recollections and cheerful times has
             passed. All my friends made my year exceptionally uncommon, and I
             wish this continues forever. With you around, each minute is a
-            unique event for me. I wish you to Happy new year to all of you.
+            unique event for me. I wish you to Happy new year to all of you. 
           </span>
         </div>
-        <div className="comments">Comments</div>
-        <div className="comments_container">
-          <Comment />
+        <div className="comments_header">Comments</div>
+        <div className="comments">
+          <Comments />
         </div>
       </div>
     </div>
