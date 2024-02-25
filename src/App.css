@@ -2,9 +2,18 @@
   max-width: 800px;
   margin: 0 auto;
 }
-.login{
+.login {
   max-width: 500px;
   margin: 0 auto;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  max-width: 800px;
+  margin: 0 auto;
+  align-items: center;
+  padding: 1rem 0;
+  margin-bottom: 1rem;
 }
 
 .post {

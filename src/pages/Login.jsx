@@ -7,9 +7,11 @@ import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import React from "react";
+import { useDispatch } from "react-redux";
 
-const Login = () => {
-  
+const Login = ({ register }) => {
+  const dispatch = useDispatch();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -23,7 +25,6 @@ const Login = () => {
     <Container component="main" maxWidth="xs">
       <Box
         sx={{
-          marginTop: 8,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -65,7 +66,7 @@ const Login = () => {
             Sign In
           </Button>
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <Link href="/register" variant="body2">
+            <Link onClick={register} sx={{ cursor: "pointer" }} variant="body2">
               Don't have an account? Register
             </Link>
           </div>

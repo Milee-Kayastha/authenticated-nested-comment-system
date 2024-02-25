@@ -10,7 +10,7 @@ import Typography from "@mui/material/Typography";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Register = () => {
+const Register = ({ login }) => {
   const navigate = useNavigate();
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -42,7 +42,7 @@ const Register = () => {
 
     setSnackbarMessage("User registered successfully");
     setOpenSnackbar(true);
-    navigate("/login");
+    login();
   };
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
@@ -52,7 +52,6 @@ const Register = () => {
     <Container component="main" maxWidth="xs">
       <Box
         sx={{
-          marginTop: 8,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -94,7 +93,7 @@ const Register = () => {
             Register
           </Button>
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <Link href="/login" variant="body2">
+            <Link onClick={login} sx={{ cursor: "pointer" }} variant="body2">
               Already have an account? Login
             </Link>
           </div>
