@@ -40,10 +40,49 @@ const Comments = () => {
   const [comments, setComments] = useState(fakeComments);
   const [activeComment, setActiveComment] = useState(null);
 
+  const addComment = (text, parentId = null) => {
+    const newComment = {
+      id: Math.random().toString(36).substr(2, 9),
+      body: text,
+      parentId,
+      userId: "1",
+      username: "John",
+      createdAt: new Date().toISOString(),
+    };
+
+    const addCommentToReplies = (commentsArr, parentId) => {
+      return commentsArr.map((comment) => {
+        if (comment.id === parentId) {
+          return {
+            ...comment,
+            replies: comment.replies
+              ? [...comment.replies, newComment]
+              : [newComment],
+          };
+        }
+        if (comment.replies) {
+          return {
+            ...comment,
+            replies: addCommentToReplies(comment.replies, parentId),
+          };
+        }
+        return comment;
+      });
+    };
+
+    if (parentId) {
+      setComments(addCommentToReplies(comments, parentId));
+    } else {
+      setComments([newComment, ...comments]);
+    }
+
+    setActiveComment(null);
+  };
+
 
   return (
     <div>
-      <CommentForm handleSubmit={null} />
+      <CommentForm handleSubmit={addComment} />
       <div className="comments_container">
         {comments &&
           comments.map((comment) => (
@@ -52,7 +91,7 @@ const Comments = () => {
               comment={comment}
               activeComment={activeComment}
               setActiveComment={setActiveComment}
-              addComment={null}
+              addComment={addComment}
               deleteComment={null}
               updateComment={null}
             />

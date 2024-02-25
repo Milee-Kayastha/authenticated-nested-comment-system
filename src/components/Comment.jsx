@@ -12,6 +12,17 @@ const Comment = ({
   // currentUserId,
 }) => {
   let currentUserId = 1;
+  const isEditing =
+    activeComment &&
+    activeComment.id === comment.id &&
+    activeComment.type === "editing";
+  const isReplying =
+    activeComment &&
+    activeComment.id === comment.id &&
+    activeComment.type === "replying";
+  const canDelete = currentUserId === comment.userId && comment?.replies?.length === 0;
+  const canReply = Boolean(currentUserId);
+  const canEdit = currentUserId === comment.userId;
 
   function stringToColor(string) {
     let hash = 0;
@@ -58,12 +69,59 @@ const Comment = ({
           }`}
         >
           <div className="comment-author">{comment.username}</div>
-           <div className="comment-text">{comment.body}</div>
-         
+          {!isEditing && <div className="comment-text">{comment.body}</div>}
+          {isEditing && (
+            <CommentForm
+              submitLabel="Update"
+              hasCancelButton
+              initialText={comment.body}
+              handleSubmit={(text) => updateComment(text, comment.id, parentId)}
+              handleCancel={() => {
+                setActiveComment(null);
+              }}
+            />
+          )}
         </div>
         <div className="comment-actions">
-          reply
-          </div>
+          {canReply && (
+            <div
+              className="comment-action"
+              onClick={() =>
+                setActiveComment({ id: comment.id, type: "replying" })
+              }
+            >
+              Reply
+            </div>
+          )}
+          {canEdit && (
+            <div
+              className="comment-action"
+              onClick={() =>
+                setActiveComment({ id: comment.id, type: "editing" })
+              }
+            >
+              Edit
+            </div>
+          )}
+          {canDelete && (
+            <div
+              className="comment-action"
+              onClick={() => deleteComment(comment.id, parentId)}
+            >
+              Delete
+            </div>
+          )}
+        </div>
+        {isReplying && (
+          <CommentForm
+            hasCancelButton={true}
+            submitLabel="Reply"
+            handleSubmit={(text) => addComment(text, comment.id)}
+            handleCancel={() => {
+              setActiveComment(null);
+            }}
+          />
+        )}
         {comment?.replies?.length > 0 && (
           <div className="replies">
             {comment.replies.map((reply) => (
