@@ -9,9 +9,8 @@ const Comment = ({
   deleteComment,
   addComment,
   parentId = null,
-  // currentUserId,
 }) => {
-  let currentUserId = 1;
+  let currentUserId = "3";
   const isEditing =
     activeComment &&
     activeComment.id === comment.id &&
@@ -20,8 +19,8 @@ const Comment = ({
     activeComment &&
     activeComment.id === comment.id &&
     activeComment.type === "replying";
-  const canDelete = currentUserId === comment.userId && comment?.replies?.length === 0;
   const canReply = Boolean(currentUserId);
+  const canDelete = currentUserId === comment.userId;
   const canEdit = currentUserId === comment.userId;
 
   function stringToColor(string) {
@@ -93,7 +92,7 @@ const Comment = ({
               Reply
             </div>
           )}
-          {canEdit && (
+          {canEdit && !isEditing && (
             <div
               className="comment-action"
               onClick={() =>
@@ -113,14 +112,16 @@ const Comment = ({
           )}
         </div>
         {isReplying && (
-          <CommentForm
-            hasCancelButton={true}
-            submitLabel="Reply"
-            handleSubmit={(text) => addComment(text, comment.id)}
-            handleCancel={() => {
-              setActiveComment(null);
-            }}
-          />
+          <div style={{ marginTop: "1rem" }}>
+            <CommentForm
+              hasCancelButton={true}
+              submitLabel="Reply"
+              handleSubmit={(text) => addComment(text, comment.id)}
+              handleCancel={() => {
+                setActiveComment(null);
+              }}
+            />
+          </div>
         )}
         {comment?.replies?.length > 0 && (
           <div className="replies">

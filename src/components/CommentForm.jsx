@@ -23,6 +23,7 @@ const CommentForm = ({
         variant="outlined"
         fullWidth
         multiline
+        autoFocus
         rows={2}
         sx={{ background: "white" }}
         placeholder="Add your comment..."
