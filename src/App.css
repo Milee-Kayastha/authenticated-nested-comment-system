@@ -33,8 +33,7 @@
   align-items: center;
   gap: 1rem;
 }
-.profile-img {
-}
+
 .profile-detail {
   display: flex;
   flex-direction: column;
@@ -106,7 +105,6 @@
 .comment-right-part {
   width: 100%;
 }
-
 .comment-content {
   display: flex;
   flex-direction: column;
