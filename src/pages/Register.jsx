@@ -1,4 +1,5 @@
 import PersonIcon from "@mui/icons-material/Person";
+import { Snackbar } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -6,17 +7,45 @@ import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
-  
+  const navigate = useNavigate();
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      username: data.get("username"),
-      password: data.get("password"),
-    });
+    let username = data.get("username");
+    let password = data.get("password");
+    if (!username || !password) return;
+
+    const existingUsers = JSON.parse(localStorage.getItem("users")) || [];
+    const isExistingUser = existingUsers.some(
+      (user) => user.username === username
+    );
+    if (isExistingUser) {
+      setSnackbarMessage("Username already exists");
+      setOpenSnackbar(true);
+
+      return;
+    }
+    const newUser = {
+      username,
+      userId: Math.floor(Math.random() * 1000),
+      password,
+    };
+    const updatedUsers = [...existingUsers, newUser];
+    localStorage.setItem("users", JSON.stringify(updatedUsers));
+
+    setSnackbarMessage("User registered successfully");
+    setOpenSnackbar(true);
+    navigate("/login");
+  };
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
   };
 
   return (
@@ -71,6 +100,19 @@ const Register = () => {
           </div>
         </Box>
       </Box>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={openSnackbar}
+        autoHideDuration={2000}
+        onClose={handleCloseSnackbar}
+        message={snackbarMessage}
+        ContentProps={{
+          style: {
+            backgroundColor: "white",
+            color: "black",
+          },
+        }}
+      />
     </Container>
   );
 };
