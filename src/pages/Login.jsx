@@ -8,17 +8,33 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import React from "react";
 import { useDispatch } from "react-redux";
+import { setOpenLoginDialog, setUser } from "../store/userSlice";
 
-const Login = ({ register }) => {
+const Login = ({ register, setOpenSnackbar, setSnackbarMessage }) => {
   const dispatch = useDispatch();
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      username: data.get("username"),
-      password: data.get("password"),
-    });
+    let username = data.get("username");
+    let password = data.get("password");
+    if (!username || !password) return;
+
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const user = users.find((user) => user.username === username);
+
+    if (!user) {
+      setSnackbarMessage("User does not exist");
+      setOpenSnackbar(true);
+      return;
+    }
+    if (user && user.password === password) {
+      dispatch(setUser(user));
+      dispatch(setOpenLoginDialog(false));
+    } else {
+      setSnackbarMessage("Invalid username or password");
+      setOpenSnackbar(true);
+    }
   };
 
   return (

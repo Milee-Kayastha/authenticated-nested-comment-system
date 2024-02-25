@@ -1,66 +1,34 @@
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import React, { useState } from "react";
-import LoginRegisterDialog from "./LoginRegisterDialog";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { clearUser, setOpenLoginDialog } from "../store/userSlice";
 
 const Header = () => {
-  //   const { setUserInfo, userInfo } = useContext(UserContext);
-  const [openLoginModal, setOpenLoginModal] = useState(false);
-  const [openLogoutModal, setOpenLogoutModal] = useState(false);
-  const username = null;
-
-  //   const getUserProfile = async () => {
-  //     try {
-  //       const response = await fetch(backend_url + "userProfile", {
-  //         credentials: "include",
-  //       });
-
-  //       if (response.ok) {
-  //         const userInfo = await response.json();
-  //         setUserInfo(userInfo);
-  //       } else {
-  //         console.error("Failed to fetch user profile:", response);
-  //       }
-  //     } catch (error) {
-  //       console.error("An error occurred while fetching user profile:", error);
-  //     }
-  //   };
-
-  //   useEffect(() => {
-  //     getUserProfile();
-  //   }, []);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user);
 
   return (
     <header className="header">
       <Typography component="h1" variant="h5">
         Authenticated Nested Comment System
       </Typography>
-      <nav className="flex gap-8">
-        {username && (
+      <nav>
+        {user && (
           <>
-            <button onClick={() => setOpenLogoutModal(true)}>Logout</button>
+            <Button onClick={() => dispatch(clearUser())}>
+              Logout ({user?.username})
+            </Button>
           </>
         )}
-        {!username && (
+        {!user && (
           <>
-            <Button onClick={() => setOpenLoginModal(true)}>
+            <Button onClick={() => dispatch(setOpenLoginDialog(true))}>
               Login / Register
             </Button>
           </>
         )}
       </nav>
-      {openLoginModal && (
-        <LoginRegisterDialog
-          open={openLoginModal}
-          onClose={() => setOpenLoginModal(false)}
-        />
-      )}
-      {openLogoutModal && (
-        <Logout
-          onOpen={openLogoutModal}
-          onClose={() => setOpenLogoutModal(false)}
-        />
-      )}
     </header>
   );
 };

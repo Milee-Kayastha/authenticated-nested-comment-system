@@ -1,5 +1,4 @@
 import PersonIcon from "@mui/icons-material/Person";
-import { Snackbar } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -7,14 +6,9 @@ import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 
-const Register = ({ login }) => {
-  const navigate = useNavigate();
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-
+const Register = ({ login, setOpenSnackbar, setSnackbarMessage }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -43,9 +37,6 @@ const Register = ({ login }) => {
     setSnackbarMessage("User registered successfully");
     setOpenSnackbar(true);
     login();
-  };
-  const handleCloseSnackbar = () => {
-    setOpenSnackbar(false);
   };
 
   return (
@@ -99,19 +90,6 @@ const Register = ({ login }) => {
           </div>
         </Box>
       </Box>
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        open={openSnackbar}
-        autoHideDuration={2000}
-        onClose={handleCloseSnackbar}
-        message={snackbarMessage}
-        ContentProps={{
-          style: {
-            backgroundColor: "white",
-            color: "black",
-          },
-        }}
-      />
     </Container>
   );
 };

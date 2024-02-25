@@ -1,7 +1,7 @@
 export const fakeComments = [
   {
     id: "1",
-    body: "Wish you a happer new year Brother",
+    body: "Wish you a happier new year Brother",
     username: "Jorge Parker",
     userId: "1",
     parentId: null,

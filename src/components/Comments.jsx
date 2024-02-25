@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
-import CommentForm from "./CommentForm";
-import Comment from "./Comment";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { fakeComments } from "../utils/constants";
+import Comment from "./Comment";
+import CommentForm from "./CommentForm";
 
 const Comments = () => {
+  const user = useSelector((state) => state.user.user);
   const [comments, setComments] = useState(fakeComments);
   const [activeComment, setActiveComment] = useState(null);
 
@@ -12,8 +14,8 @@ const Comments = () => {
       id: Math.random().toString(36).slice(2, 9),
       body: text,
       parentId,
-      userId: "3",
-      username: "Sara",
+      userId: user?.userId,
+      username: user?.username,
       createdAt: new Date().toISOString(),
     };
 
@@ -109,7 +111,7 @@ const Comments = () => {
 
   return (
     <div>
-      <CommentForm handleSubmit={addComment} />
+      {user && <CommentForm handleSubmit={addComment} />}
       <div className="comments_container">
         {comments &&
           comments.map((comment) => (

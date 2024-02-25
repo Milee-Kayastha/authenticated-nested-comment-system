@@ -1,5 +1,7 @@
-import CommentForm from "./CommentForm";
 import Avatar from "@mui/material/Avatar";
+import { useDispatch, useSelector } from "react-redux";
+import { setOpenLoginDialog } from "../store/userSlice";
+import CommentForm from "./CommentForm";
 
 const Comment = ({
   comment,
@@ -10,7 +12,8 @@ const Comment = ({
   addComment,
   parentId = null,
 }) => {
-  let currentUserId = "3";
+  const dispatch = useDispatch();
+  const currentUserId = useSelector((state) => state.user.user?.userId);
   const isEditing =
     activeComment &&
     activeComment.id === comment.id &&
@@ -82,16 +85,18 @@ const Comment = ({
           )}
         </div>
         <div className="comment-actions">
-          {canReply && (
-            <div
-              className="comment-action"
-              onClick={() =>
-                setActiveComment({ id: comment.id, type: "replying" })
+          <div
+            className="comment-action"
+            onClick={() => {
+              if (!canReply) {
+                dispatch(setOpenLoginDialog(true));
+                return;
               }
-            >
-              Reply
-            </div>
-          )}
+              setActiveComment({ id: comment.id, type: "replying" });
+            }}
+          >
+            Reply
+          </div>
           {canEdit && !isEditing && (
             <div
               className="comment-action"
