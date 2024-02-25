@@ -38,14 +38,25 @@ const Comments = () => {
     },
   ];
   const [comments, setComments] = useState(fakeComments);
+  const [activeComment, setActiveComment] = useState(null);
+
 
   return (
     <div>
-      <CommentForm />
+      <CommentForm handleSubmit={null} />
       <div className="comments_container">
-        {comments && comments.map((comment) => (
-          <Comment key={comment.id} comment={comment} />
-        ))}
+        {comments &&
+          comments.map((comment) => (
+            <Comment
+              key={comment.id}
+              comment={comment}
+              activeComment={activeComment}
+              setActiveComment={setActiveComment}
+              addComment={null}
+              deleteComment={null}
+              updateComment={null}
+            />
+          ))}
       </div>
     </div>
   );
