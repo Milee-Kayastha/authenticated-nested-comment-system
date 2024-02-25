@@ -79,6 +79,66 @@ const Comments = () => {
     setActiveComment(null);
   };
 
+  const updateComment = (text, commentId, parentId = null) => {
+    const updateCommentInReplies = (commentsArr, parentId) => {
+      return commentsArr.map((comment) => {
+        if (comment.id === parentId) {
+          return {
+            ...comment,
+            replies: comment.replies
+              ? comment.replies.map((reply) =>
+                  reply.id === commentId ? { ...reply, body: text } : reply
+                )
+              : [],
+          };
+        }
+        if (comment.replies) {
+          return {
+            ...comment,
+            replies: updateCommentInReplies(comment.replies, parentId),
+          };
+        }
+        return comment;
+      });
+    };
+
+    const updatedComments = parentId
+      ? updateCommentInReplies(comments, parentId)
+      : comments.map((comment) =>
+          comment.id === commentId ? { ...comment, body: text } : comment
+        );
+
+    setComments(updatedComments);
+    setActiveComment(null);
+  };
+
+  const deleteComment = (commentId, parentId = null) => {
+    const deleteCommentInReplies = (commentsArr, parentId) => {
+      return commentsArr.map((comment) => {
+        if (comment.id === parentId) {
+          return {
+            ...comment,
+            replies: comment.replies
+              ? comment.replies.filter((reply) => reply.id !== commentId)
+              : [],
+          };
+        }
+        if (comment.replies) {
+          return {
+            ...comment,
+            replies: deleteCommentInReplies(comment.replies, parentId),
+          };
+        }
+        return comment;
+      });
+    };
+
+    const updatedComments = parentId
+      ? deleteCommentInReplies(comments, parentId)
+      : comments.filter((comment) => comment.id !== commentId);
+
+    setComments(updatedComments);
+  };
 
   return (
     <div>
@@ -92,8 +152,8 @@ const Comments = () => {
               activeComment={activeComment}
               setActiveComment={setActiveComment}
               addComment={addComment}
-              deleteComment={null}
-              updateComment={null}
+              deleteComment={deleteComment}
+              updateComment={updateComment}
             />
           ))}
       </div>
