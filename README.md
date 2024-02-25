@@ -22,7 +22,7 @@ This is a React application that implements an interactive nested comment system
 1. Clone the repository:
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/Milee-Kayastha/authenticated-nested-comment-system.git
    ```
 
 2. Navigate to the project directory:
